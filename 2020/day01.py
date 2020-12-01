@@ -3,7 +3,7 @@ def read_report(path):
         expense_report = [int(l) for l in f.read().splitlines()]
     return expense_report
 
-expense_report = read_report("data/day_01.txt")
+expense_report = read_report("2020/data/day01.txt")
 
 # part 1
 def find_sum(numbers, target_sum=2020):
@@ -19,7 +19,7 @@ while expense_report:
     n = expense_report.pop()
     remainder = 2020 - n
     try:
-        answer = find_sum(expense_report[i:], remainder) * n
+        answer = find_sum(expense_report, remainder) * n
     except TypeError:
         continue
 print(answer)
