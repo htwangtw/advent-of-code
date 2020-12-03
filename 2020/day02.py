@@ -1,17 +1,22 @@
-def read_passcode(path):
+def read_input(path):
     with open(path, "r") as f:
-        passcode_book = []
-        for l in f.readlines():
-            l = l.split()
-            ub, lb = map(int, l[0].split("-"))
-            entry = {"rule": (ub, lb),
-                     "word": l[1].split(":")[0],
-                     "password": l[2]}
-            passcode_book.append(entry)
+        data = [l for l in f.read().splitlines()]
+    return data
+
+def parse_passcode(data):
+    passcode_book = []
+    for l in data:
+        l = l.split()
+        ub, lb = map(int, l[0].split("-"))
+        entry = {"rule": (ub, lb),
+                 "word": l[1].split(":")[0],
+                 "password": l[2]}
+        passcode_book.append(entry)
 
     return passcode_book
 
-passcode_book = read_passcode("2020/data/day02.txt")
+data = read_input("2020/data/day02.txt")
+passcode_book = parse_passcode(data)
 
 # part 1
 count = 0
