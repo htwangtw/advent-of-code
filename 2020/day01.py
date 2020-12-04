@@ -1,7 +1,5 @@
-def read_input(path):
-    with open(path, "r") as f:
-        data = [l for l in f.read().splitlines()]
-    return data
+from aoc.tools import read_input
+
 
 expense_report = read_input("2020/data/day01.txt")
 
