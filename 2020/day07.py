@@ -48,10 +48,10 @@ print(outer_bag(set(), {target}))
 
 
 def innner_bags(color):
-    contain = rules[color]
-    if len(contain) == 0:
+    bags_to_find = rules[color]
+    if len(bags_to_find) == 0:
         return 0
     else:
-        return sum(contain[key] * innner_bags(key) + contain[key] for key in contain.keys())
+        return sum(bags_to_find[bag] * innner_bags(bag) + bags_to_find[bag] for bag in bags_to_find.keys())
 
 print(innner_bags(target))
