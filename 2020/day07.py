@@ -38,13 +38,21 @@ def outer_bag(found_bags, bags_to_find):
 
     find = bags_to_find.pop()
     bags = [
-        key
-        for key, content in rules.items()
-        if content and find in content.keys()
+        color
+        for color, inner_bags in rules.items()
+        if inner_bags and find in inner_bags.keys()
     ]
-    return outer_bag(found_bags.update(bags), bags_to_find.update(bags))
+    found_bags.update(bags)
+    bags_to_find.update(bags)
+    return outer_bag(found_bags, bags_to_find)
 
 print(outer_bag(set(), {target}))
+
+# part one even shorter
+def contains_shiny(bag):
+    contain = rules[bag].keys()
+    return 'shiny gold' in contain or any((contains_shiny(color) for color in contain))
+print(sum(contains_shiny(bag) for bag in rules.keys()))
 
 
 def innner_bags(color):
