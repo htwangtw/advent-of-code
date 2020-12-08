@@ -37,13 +37,11 @@ print(acc)
 # jmp <-> nop that will end the operation
 # acc number
 
+swap = {"jmp": "nop", "nop": "jmp"}
 for i , (instruction, move) in enumerate(boot_code):
     if instruction != "acc":
         new_op = boot_code.copy()
-        if instruction == "nop":
-            new_op[i] = ("jmp", move)
-        elif instruction == "jmp":
-            new_op[i] = ("nop", move)
+        new_op[i] = (swap[instruction], move)
 
         op_path = []
         start = 0
