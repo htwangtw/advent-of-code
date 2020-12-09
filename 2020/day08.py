@@ -16,23 +16,23 @@ boot_code = parse_input(path)
 # Immediately before any instruction is executed a second time,
 # what value is in the accumulator?
 
-def operate(op_rule, start, acc):
-    if op_rule[0] == "acc":
-        start += 1
-        acc += op_rule[1]
-    elif op_rule[0] == "jmp":
-        start += op_rule[1]
+def operate(instr, state):
+    loc, acc = state
+    if instr[0] == "acc":
+        loc += 1
+        acc += instr[1]
+    elif instr[0] == "jmp":
+        loc += instr[1]
     else:
-        start += 1
-    return start, acc
+        loc += 1
+    return (loc, acc)
 
 op_path = []
-start = 0
-acc = 0
-while start not in op_path:
-    op_path.append(start)
-    start, acc = operate(boot_code[start], start, acc)
-print(acc)
+state = (0, 0)
+while state[0] not in op_path:
+    op_path.append(state[0])
+    state = operate(boot_code[state[0]], state)
+print(state[1])
 
 # jmp <-> nop that will end the operation
 # acc number
@@ -40,15 +40,14 @@ print(acc)
 swap = {"jmp": "nop", "nop": "jmp"}
 for i , (instruction, move) in enumerate(boot_code):
     if instruction != "acc":
-        new_op = boot_code.copy()
-        new_op[i] = (swap[instruction], move)
+        new_bc = boot_code.copy()
+        new_bc[i] = (swap[instruction], move)
 
         op_path = []
-        start = 0
-        acc = 0
-        while start not in op_path:
-            op_path.append(start)
-            start, acc = operate(new_op[start], start, acc)
-            if start == len(new_op):
-                print(acc)
+        state = (0, 0)
+        while state[0] not in op_path:
+            op_path.append(state[0])
+            state = operate(new_bc[state[0]], state)
+            if state[0] == len(new_bc):
+                print(state[1])
                 break
