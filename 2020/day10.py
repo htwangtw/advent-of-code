@@ -78,8 +78,7 @@ print(diff.count(1) * diff.count(3))
 
 
 # reading part two make me realise
-# it's a bad idea to brute force this
-# and this can be a graph theory question
+# it's a graph
 
 data = list(map(int ,read_input(path)))
 data.append(0)
@@ -96,3 +95,19 @@ for node, gone_pass in adapter_map.items():
             adapter_map[node + i] += gone_pass
 
 print(f"part 2:{adapter_map[max(data)]}")
+
+# directed graph solution
+adjacencies = [[0 for x in range(len(data))] for y in range(len(data))]
+for i in range(len(data)):
+    for j in range(i+1, len(data)):
+        if data[j] <= data[i] + 3:
+            adjacencies[i][j] = 1
+
+adj = np.array(adjacencies)
+curr = adj
+total = 0
+for d in data:
+    curr = np.matmul(curr, adj)
+    total += curr[0][-1]
+
+print(total)
