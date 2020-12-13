@@ -96,18 +96,18 @@ for node, gone_pass in adapter_map.items():
 
 print(f"part 2:{adapter_map[max(data)]}")
 
-# directed graph solution
-adjacencies = [[0 for x in range(len(data))] for y in range(len(data))]
-for i in range(len(data)):
-    for j in range(i+1, len(data)):
-        if data[j] <= data[i] + 3:
-            adjacencies[i][j] = 1
+# directed graph solution found on reddit
+# adjacencies = [[0 for x in range(len(data))] for y in range(len(data))]
+# for i in range(len(data)):
+#     for j in range(i+1, len(data)):
+#         if data[j] <= data[i] + 3:
+#             adjacencies[i][j] = 1
 
-adj = np.array(adjacencies)
-curr = adj
-total = 0
-for d in data:
-    curr = np.matmul(curr, adj)
-    total += curr[0][-1]
+# adj = np.array(adjacencies)
+# curr = adj
+# total = 0
+# for d in data:
+#     curr = np.matmul(curr, adj)
+#     total += curr[0][-1]
 
-print(total)
+# print(total)
