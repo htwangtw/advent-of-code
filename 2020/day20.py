@@ -142,7 +142,7 @@ def break_tile(tile):
     return [[a for a in l] for l in tile]
 
 # part 1
-tiles = parse_tiles(test)
+tiles = parse_tiles(data)
 
 # all possible boarder
 boarders = {}
@@ -260,8 +260,8 @@ print(f"solve: x**2 - {n_connection.count(3) / 2} = {n_connection.count(4)}")
 print(f"solve: y = {n_connection.count(3) / 2} - x")
 
 # I don't know how to solve this in python but I can do it by hand:
-# grid_size = (12, 12)
-grid_size = (3, 3)
+grid_size = (12, 12)
+# grid_size = (3, 3)
 
 # get all the side tiles
 sides = {k: i for k, i in connections.items() if len(i) <= 3}
@@ -348,13 +348,52 @@ def parse_map(full_map):
     full_map = break_tile(full_map)
     for x in range(len(tmp)):
         for y in range(len(tmp)):
-            full_map[y][x] = full_map[y][x]=="#"
+            full_map[y][x] = int(full_map[y][x]=="#")
     return full_map
 
 
-monster = """                  #
-#    ##    ##    ###
- #  #  #  #  #  #   """
+monster = """
+                  # \n
+#    ##    ##    ###\n
+ #  #  #  #  #  #   \n"""
 
-bin_monster = [[i == "#" for i in l] for l in break_tile(monster.splitlines())]
-bin_map = parse_map(full_map)
+
+def element_mul(a, b):
+    for i in range(len(a)):
+        for j in range(len(a[0])):
+            a[i][j] *= b[i][j]
+    return a
+
+# get all possible maps
+def all_the_maps(full_map):
+    all_maps = [full_map]
+    for _ in range(3):
+        last = rotate_tile(break_tile(all_maps[-1]))
+        all_maps.append(last)
+
+    flipped_maps = []
+    for m in all_maps:
+        flipped_maps.append(mirror_x(m))
+        flipped_maps.append(mirror_y(m))
+    return all_maps + flipped_maps
+
+bin_monster = [[int(i == "#") for i in l] for l in break_tile(monster.split("\n")) if l]
+
+all_maps = all_the_maps(full_map)
+
+for m in all_maps:
+    n_monster = 0
+    bin_map = parse_map(m)
+    for y in range(len(bin_map) - len(bin_monster) + 1):
+        y_end = y + len(bin_monster)
+        for x in range(len(bin_map) - len(bin_monster[0]) + 1):
+            x_end = x + len(bin_monster[0])
+            current_range = [l[x:x_end] for l in bin_map[y : y_end]]
+            look = element_mul(current_range, bin_monster)
+            if look == bin_monster:
+                n_monster += 1
+    if n_monster != 0:
+        break
+
+print("part: 2")
+print(sum(sum(l) for l in bin_map) - sum(sum(l) for l in bin_monster) * n_monster)
