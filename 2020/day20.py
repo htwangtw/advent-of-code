@@ -5,116 +5,6 @@ from math import prod
 with open("2020/data/day20.txt", "r") as f:
     data = f.read().split("\n\n")
 
-test = """
-Tile 2311:
-..##.#..#.
-##..#.....
-#...##..#.
-####.#...#
-##.##.###.
-##...#.###
-.#.#.#..##
-..#....#..
-###...#.#.
-..###..###
-
-Tile 1951:
-#.##...##.
-#.####...#
-.....#..##
-#...######
-.##.#....#
-.###.#####
-###.##.##.
-.###....#.
-..#.#..#.#
-#...##.#..
-
-Tile 1171:
-####...##.
-#..##.#..#
-##.#..#.#.
-.###.####.
-..###.####
-.##....##.
-.#...####.
-#.##.####.
-####..#...
-.....##...
-
-Tile 1427:
-###.##.#..
-.#..#.##..
-.#.##.#..#
-#.#.#.##.#
-....#...##
-...##..##.
-...#.#####
-.#.####.#.
-..#..###.#
-..##.#..#.
-
-Tile 1489:
-##.#.#....
-..##...#..
-.##..##...
-..#...#...
-#####...#.
-#..#.#.#.#
-...#.#.#..
-##.#...##.
-..##.##.##
-###.##.#..
-
-Tile 2473:
-#....####.
-#..#.##...
-#.##..#...
-######.#.#
-.#...#.#.#
-.#########
-.###.#..#.
-########.#
-##...##.#.
-..###.#.#.
-
-Tile 2971:
-..#.#....#
-#...###...
-#.#.###...
-##.##..#..
-.#####..##
-.#..####.#
-#..#.#..#.
-..####.###
-..#.#.###.
-...#.#.#.#
-
-Tile 2729:
-...#.#.#.#
-####.#....
-..#.#.....
-....#..#.#
-.##..##.#.
-.#.####...
-####.#.#..
-##.####...
-##..#.##..
-#.##...##.
-
-Tile 3079:
-#.#.#####.
-.#..######
-..#.......
-######....
-####.#..#.
-.#...#.##.
-#.#####.##
-..#.###...
-..#.......
-..#.###...
-""".split("\n\n")
-
 def parse_tiles(data):
     tiles = {}
     for tile in data:
@@ -122,12 +12,6 @@ def parse_tiles(data):
         key = int(tile[1].split(":")[0])
         tiles[key] = tile[2:]
     return tiles
-
-def flip_tile(tile):
-    # original, vertical flip, mirror, mirror verticle flip
-    return [tile, tile[::-1],
-            [l[::-1] for l in tile],
-            [l[::-1] for l in tile][::-1]]
 
 def get_border(tile):
     # get boarder clockwise from top
@@ -169,7 +53,6 @@ for a, b in product(boarders.keys(), repeat=2):
 # there should be 4 tiles with 2 connections only
 print("part 1:")
 print(prod(key for key, c in connections.items() if len(c) == 2))
-
 
 # part 2
 def rotate_tile(tile):
@@ -251,8 +134,6 @@ def fill_map(start, tile_map, middle):
             start = (start[0] + 1, 0)
         return fill_map(start, tile_map, remaining)
 
-
-
 n_connection = [len(v) for v in connections.values()]
 print(f"centre tiles: {n_connection.count(4)}")
 print(f"edge tiles: {n_connection.count(3)}")
@@ -261,7 +142,6 @@ print(f"solve: y = {n_connection.count(3) / 2} - x")
 
 # I don't know how to solve this in python but I can do it by hand:
 grid_size = (12, 12)
-# grid_size = (3, 3)
 
 # get all the side tiles
 sides = {k: i for k, i in connections.items() if len(i) <= 3}
@@ -270,7 +150,6 @@ middle = [k for k, i in connections.items() if len(i) == 4]
 edges = walk_edge(corners[0], sides)
 tile_no_map = fill_edge(edges, tile_map={})
 tile_no_map = fill_map((0, 0), tile_no_map, middle)
-
 
 # find the tile pattern that joins together
 # calibrate one corner (0,0) (three tiles)
@@ -351,12 +230,10 @@ def parse_map(full_map):
             full_map[y][x] = int(full_map[y][x]=="#")
     return full_map
 
-
 monster = """
                   # \n
 #    ##    ##    ###\n
  #  #  #  #  #  #   \n"""
-
 
 def element_mul(a, b):
     for i in range(len(a)):
